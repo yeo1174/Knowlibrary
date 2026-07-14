@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Knowledge Library - Content Table</title>
+<style>
+  :root {
+    --primary: #2D6473;
+    --accent: #427381;
+    --accent-light: #81A2AB;
+    --bg: #f5f7f8;
+    --card-bg: #ffffff;
+    --border: #d0d8dc;
+    --text: #1a2a30;
+    --text-light: #5a6e78;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  header {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff;
+    padding: 40px 48px;
+    border-radius: 12px;
+    margin-bottom: 36px;
+  }
+  header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  header p {
+    margin-top: 8px;
+    opacity: 0.85;
+    font-size: 15px;
+  }
+  .stats-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    background: rgba(255,255,255,0.15);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .section {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .section-header {
+    background: var(--accent);
+    color: #fff;
+    padding: 14px 24px;
+    font-size: 17px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: default;
+  }
+  .section-header .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th {
+    text-align: left;
+    padding: 10px 24px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    background: #f0f3f5;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+  }
+  td {
+    padding: 10px 24px;
+    border-bottom: 1px solid #eef2f4;
+    font-size: 14px;
+    vertical-align: top;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafb; }
+  .doc-name {
+    font-weight: 500;
+    color: var(--primary);
+    white-space: nowrap;
+  }
+  .doc-desc {
+    color: var(--text-light);
+    font-size: 13px;
+  }
+  .trigger {
+    display: inline-block;
+    background: #e8eef0;
+    color: var(--primary);
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--accent-light);
+    color: #fff;
+    padding: 1px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .sub-section td:first-child { padding-left: 48px; }
+  .sub-section .doc-name { font-size: 13px; }
+  footer {
+    text-align: center;
+    padding: 32px 0 12px;
+    color: var(--text-light);
+    font-size: 13px;
+  }
+  @media (max-width: 768px) {
+    header { padding: 28px 20px; }
+    header h1 { font-size: 22px; }
+    td, th { padding: 8px 16px; }
+    .sub-section td:first-child { padding-left: 32px; }
+    .doc-name { white-space: normal; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Knowledge Library</h1>
+  <p>Architectural & regulatory reference — Malaysian building standards, contracts, circulars, and guidelines</p>
+  <div class="stats-row">
+    <span class="stat">7 sections</span>
+    <span class="stat">40+ documents</span>
+    <span class="stat">Last updated: July 2026</span>
+  </div>
+</header>
+
+<!-- UBBL -->
+<div class="section">
+  <div class="section-header">
+    <span>UBBL</span>
+    <span class="badge">Uniform Building By-Laws</span>
+  </div>
+  <table>
+    <thead><tr><th>Document</th><th>Description</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td class="doc-name">ubbl-2021.md</td><td class="doc-desc">Full UBBL 2021 by-law clauses — comprehensive reference</td><td><span class="trigger">kl-ubbl</span></td></tr>
+      <tr><td class="doc-name">fire-services-act-1988-fire-certificate.md</td><td class="doc-desc">Fire Services Act 1988 — fire certificate requirements & procedures</td><td></td></tr>
+      <tr><td class="doc-name">form-f1-partial-ccc.md</td><td class="doc-desc">Form F1 Partial CCC — conditions, demarcation, filing within 14 days</td><td><span class="trigger">kl-form-f1</span></td></tr>
+      <tr class="sub-section"><td class="doc-name">fire-safety/hose-reel-installation-height.md</td><td class="doc-desc">Hose reel installation height standards</td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- LAM / PAM -->
+<div class="section">
+  <div class="section-header">
+    <span>LAM Circulars &amp; PAM Practice Notes</span>
+    <span class="badge">Lembaga Arkitek Malaysia</span>
+  </div>
+  <table>
+    <thead><tr><th>Document</th><th>Description</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td colspan="3" style="padding: 8px 24px; background: #f5f8fa; font-size: 13px; font-weight: 600; color: var(--primary);">Circulars</td></tr>
+      <tr><td class="doc-name">2025-General-Circular-No-1-Form-G8-Fire-Safety.md</td><td class="doc-desc">LAM Circular 2025 — Form G8 Fire Safety certificate</td><td></td></tr>
+      <tr><td class="doc-name">2025-General-Circular-No-2-Form-G10-Mechanical-Ventilation.md</td><td class="doc-desc">LAM Circular 2025 — Form G10 Mechanical Ventilation</td><td></td></tr>
+      <tr><td colspan="3" style="padding: 8px 24px; background: #f5f8fa; font-size: 13px; font-weight: 600; color: var(--primary);">PAM Practice Notes</td></tr>
+      <tr><td class="doc-name">pn2023-3-the-arch-resp-setting-out.md</td><td class="doc-desc">PN 2023/3 — Architect's responsibility for setting out</td><td><span class="trigger">kl-pn-settingout</span></td></tr>
+      <tr><td class="doc-name">pn2024-3-retention-under-contracts-2006-2018r.md</td><td class="doc-desc">PN 2024/3 — Retention under PAM Contracts 2006 & 2018</td><td><span class="trigger">kl-pn-retention</span></td></tr>
+      <tr><td class="doc-name">pn-2025-1-dosh-pcwd.md</td><td class="doc-desc">PN 2025/1 — DOSH PCWD registration & compliance</td><td><span class="trigger">kl-pn-dosh</span></td></tr>
+      <tr><td class="doc-name">pn2025-1-pcwd-role-summary.md</td><td class="doc-desc">PN 2025/1 — PCWD role summary</td><td></td></tr>
+      <tr><td class="doc-name">2025-PAM-Practice-Note-PN-2025-1-PCWD.md</td><td class="doc-desc">PAM PN 2025/1 — Principal Contractor for Works of Demolition (PCWD)</td><td></td></tr>
+      <tr><td class="doc-name">pn2025-2-planning-statutory-append-abc.md</td><td class="doc-desc">PN 2025/2 — Planning statutory appendices A, B, C</td><td><span class="trigger">kl-pn-planning</span></td></tr>
+      <tr><td class="doc-name">pn-2026-1-shop-drawings.md</td><td class="doc-desc">PN 2026/1 — Shop drawings review & approval</td><td><span class="trigger">kl-pn-shop-drawings</span></td></tr>
+      <tr><td class="doc-name">pn2026-2-cessation-of-practice.md</td><td class="doc-desc">PN 2026/2 — Cessation of practice</td><td><span class="trigger">kl-pn-cessation</span></td></tr>
+      <tr><td class="doc-name">pn2026-3-limitation-periods.md</td><td class="doc-desc">PN 2026/3 — Limitation periods for claims</td><td><span class="trigger">kl-pn-limitation</span></td></tr>
+      <tr><td class="doc-name">pn2026-6-contract-completion-part2.md</td><td class="doc-desc">PN 2026/6 — Contract completion (Part 2)</td><td><span class="trigger">kl-pn-completion</span></td></tr>
+      <tr><td class="doc-name">pn2026-9-cost-escalation-in-contracts.md</td><td class="doc-desc">PN 2026/9 — Cost escalation & disruptions in contracts</td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SPA -->
+<div class="section">
+  <div class="section-header">
+    <span>SPA</span>
+    <span class="badge">Sale &amp; Purchase Agreement</span>
+  </div>
+  <table>
+    <thead><tr><th>Document</th><th>Description</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td class="doc-name">hda-stage-claim-2017.md</td><td class="doc-desc">HDA stage claims — HDA 2017 stage claim schedule & procedures (10 stages)</td><td><span class="trigger">kl-spa</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Contracts -->
+<div class="section">
+  <div class="section-header">
+    <span>Contracts</span>
+    <span class="badge">PAM Contract Suite</span>
+  </div>
+  <table>
+    <thead><tr><th>Document</th><th>Description</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td class="doc-name">pam2006.md</td><td class="doc-desc">PAM Contract 2006 (With Quantities) — full clause reference</td><td></td></tr>
+      <tr><td class="doc-name">pam2006-amendments-rev7.md</td><td class="doc-desc">PAM 2006 — Revision 7 Amendments</td><td></td></tr>
+      <tr><td class="doc-name">pam2018.md</td><td class="doc-desc">PAM Contract 2018 (With Quantities) — full clause reference</td><td><span class="trigger">kl-pam</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Appointment -->
+<div class="section">
+  <div class="section-header">
+    <span>Appointment / TOR</span>
+    <span class="badge">Terms of Reference</span>
+  </div>
+  <table>
+    <thead><tr><th>Document</th><th>Description</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td class="doc-name">sime-darby-tor-architect-2024.md</td><td class="doc-desc">Sime Darby — Terms of Reference for Architect (2024)</td><td><span class="trigger">kl-appointment</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Codes -->
+<div class="section">
+  <div class="section-header">
+    <span>Codes</span>
+    <span class="badge">Malaysian Standards</span>
+  </div>
+  <table>
+    <thead><tr><th>Document</th><th>Description</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td class="doc-name">ms-832-2022-aluminium-alloy-windows.md</td><td class="doc-desc">MS 832:2022 — Aluminium alloy windows specification</td><td><span class="trigger">kl-ms832</span></td></tr>
+      <tr><td class="doc-name">ms-1017-2022-aluminium-framed-glass-sliding-doors.md</td><td class="doc-desc">MS 1017:2022 — Aluminium framed glass sliding doors</td><td><span class="trigger">kl-ms1017</span></td></tr>
+      <tr><td class="doc-name">ms-1183-2015-fire-safety.md</td><td class="doc-desc">MS 1183:2015 — Fire safety in building design & construction</td><td><span class="trigger">kl-ms1183</span></td></tr>
+      <tr><td class="doc-name">ms-1539-part3-2003-portable-fire-extinguisher.md</td><td class="doc-desc">MS 1539 Part 3:2003 — Portable fire extinguisher selection & placement</td><td></td></tr>
+      <tr><td class="doc-name">ms-1553-2002-wind-loading.md</td><td class="doc-desc">MS 1553:2002 — Wind loading code of practice</td><td><span class="trigger">kl-ms1553</span></td></tr>
+      <tr><td class="doc-name">ms-2680-2017-energy-efficiency-residential.md</td><td class="doc-desc">MS 2680:2017 — Energy efficiency & renewable energy for residential buildings</td><td><span class="trigger">kl-ms2680</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Guidelines -->
+<div class="section">
+  <div class="section-header">
+    <span>Guidelines</span>
+    <span class="badge">Regulatory &amp; Technical</span>
+  </div>
+  <table>
+    <thead><tr><th>Document</th><th>Description</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td class="doc-name">hirarc-2008.md</td><td class="doc-desc">DOSH HIRARC Guidelines 2008 — Hazard Identification, Risk Assessment & Risk Control</td><td><span class="trigger">kl-hirarc</span></td></tr>
+      <tr><td class="doc-name">dosh-mykkp-pemtk.md</td><td class="doc-desc">DOSH MyKKP / PEMTK — Workplace registration & notification</td><td><span class="trigger">kl-dosh</span></td></tr>
+      <tr><td class="doc-name">msma-chapter-4-roof-drainage.md</td><td class="doc-desc">MSMA Chapter 4 — Roof drainage design standards</td><td><span class="trigger">kl-msma</span></td></tr>
+      <tr><td class="doc-name">strata-share-unit-calculation.md</td><td class="doc-desc">Share Unit Calculation under SMA 2013 / Strata Titles Act</td><td><span class="trigger">kl-shareunit</span></td></tr>
+      <tr><td colspan="3" style="padding: 8px 24px; background: #f5f8fa; font-size: 13px; font-weight: 600; color: var(--primary);">GreenRE</td></tr>
+      <tr class="sub-section"><td class="doc-name">green-re/*.md</td><td class="doc-desc">GreenRE scorecards & rating tools</td><td><span class="trigger">kl-greenre</span></td></tr>
+      <tr><td colspan="3" style="padding: 8px 24px; background: #f5f8fa; font-size: 13px; font-weight: 600; color: var(--primary);">State Guidelines — Selangor</td></tr>
+      <tr class="sub-section"><td class="doc-name">state-guidelines/selangor/*.md</td><td class="doc-desc">Selangor state planning & industrial guidelines</td><td><span class="trigger">kl-selangor</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Regulations -->
+<div class="section">
+  <div class="section-header">
+    <span>Regulations</span>
+    <span class="badge">OSH &amp; Statutory</span>
+  </div>
+  <table>
+    <thead><tr><th>Document</th><th>Description</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td class="doc-name">osh-construction-design-management-2024.md</td><td class="doc-desc">OSH CDM Regulations 2024 — Construction Design & Management</td><td><span class="trigger">kl-osh</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Materials -->
+<div class="section">
+  <div class="section-header">
+    <span>Materials</span>
+    <span class="badge">Product Data &amp; Specifications</span>
+  </div>
+  <table>
+    <thead><tr><th>Document</th><th>Description</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td class="doc-name">sikawall-603-acrylic.md</td><td class="doc-desc">Sikawall 603 Acrylic — product data & application</td><td><span class="trigger">kl-materials</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Utilities -->
+<div class="section">
+  <div class="section-header">
+    <span>Utilities</span>
+    <span class="badge">TNB &amp; Infrastructure</span>
+  </div>
+  <table>
+    <thead><tr><th>Document</th><th>Description</th><th>Trigger</th></tr></thead>
+    <tbody>
+      <tr><td class="doc-name">tnb-load-demand-md.md</td><td class="doc-desc">TNB Load Demand Guidelines — ESAH 3.1 tables, MD ranges, supply schemes</td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>
+  Knowledge Library &mdash; SKY Architects &bull; Generated July 2026
+</footer>
+
+</body>
+</html>
