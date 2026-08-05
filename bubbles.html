@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang=en><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1">
+<title>KL Knowledge Map</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0e1519;color:#c8d4d8;overflow:hidden;height:100vh;width:100vw;font-family:-apple-system,system-ui,sans-serif}
+svg{width:100%;height:100%;display:block}
+#P{position:fixed;top:14px;left:14px;z-index:100;background:rgba(16,26,32,.93);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:14px;min-width:190px;max-width:270px;box-shadow:0 6px 24px rgba(0,0,0,.5)}
+#P h2{font-size:14px;font-weight:600;color:#b4cad4;letter-spacing:-.2px;margin-bottom:2px}
+#P .s{font-size:10px;color:#4a6a78;margin-bottom:8px}
+#S{width:100%;padding:6px 9px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:5px;color:#d0d8dc;font-size:12px;outline:0;margin-bottom:8px}
+#S:focus{border-color:#3a7a8a}
+#Fl{display:flex;flex-wrap:wrap;gap:3px}
+.cf{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:3px;font-size:9px;cursor:pointer;border:1px solid transparent;opacity:.5;user-select:none}
+.cf:hover,.cf.on{opacity:1}.cf.on{border-color:rgba(255,255,255,.15)}
+.cf .d{width:6px;height:6px;border-radius:50%;display:inline-block}
+#Lk{margin-top:8px;font-size:10px;color:#4a6a78}
+#Lk a{color:#7ab0c4;text-decoration:none}
+#Lk a:hover{text-decoration:underline}
+#D{position:fixed;top:14px;right:14px;z-index:110;background:rgba(16,26,32,.96);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px;max-width:300px;width:calc(100vw - 40px);max-height:80vh;overflow:auto;display:none;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+#D .dh{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+#D .dn{font-size:13px;font-weight:600;color:#e2edf1;flex:1;line-height:1.35;word-break:break-word}
+#D .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+#Db{background:none;border:none;color:#5a7a88;font-size:16px;cursor:pointer;line-height:1;padding:2px}
+#Db:hover{color:#fff}
+#D .dc{font-size:10px;color:#5a8a9a;margin-bottom:8px}
+#D .ds{font-size:11px;color:#9db4be;line-height:1.5;margin-bottom:8px}
+#D .dr{font-size:10px;color:#4a6a78;margin-bottom:10px}
+#D .rh{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:#3a5a68;margin-bottom:5px}
+#D .rr{display:flex;flex-wrap:wrap;gap:4px}
+.rc{background:rgba(58,122,138,.18);border:1px solid rgba(90,170,190,.3);color:#8fd0e4;border-radius:4px;padding:3px 7px;font-size:10px;cursor:pointer}
+.rc:hover{background:rgba(58,122,138,.35)}
+#D .no{font-size:10px;color:#3a5a68}
+#L{position:fixed;bottom:14px;left:14px;z-index:100;background:rgba(16,26,32,.85);border:1px solid rgba(255,255,255,.04);border-radius:6px;padding:5px 10px;display:flex;flex-wrap:wrap;gap:2px 10px;font-size:9px;pointer-events:none;max-width:60vw}
+#L .li{display:flex;align-items:center;gap:3px;color:#6a8a98}
+#L .d{width:6px;height:6px;border-radius:2px;flex-shrink:0}
+#T{position:fixed;z-index:200;background:rgba(16,26,32,.95);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;pointer-events:none;display:none;box-shadow:0 8px 28px rgba(0,0,0,.5)}
+#T .tn{font-size:12px;font-weight:600;color:#dce8ec}
+#T .tc{font-size:10px;color:#4a6a78;margin-top:2px}
+.H{position:fixed;bottom:14px;right:14px;z-index:100;color:#1a3a48;font-size:9px;text-align:right;pointer-events:none;line-height:1.5}
+.lab1,.lab2{stroke:#0e1519;stroke-width:2.5px;paint-order:stroke;pointer-events:none}
+</style>
+<div id=P><h2>Knowledge Map</h2><div class=s>69 docs - 30 cross-references</div><input id=S placeholder="Search docs, topics, tags..."><div id=Fl></div><div id=Lk><a href="index.html">Content Table</a> - <a href="graph.html">Force Graph</a></div></div>
+<div id=D><div id=Dc></div></div>
+<div id=T><div class=tn></div><div class=tc></div></div>
+<div id=L></div>
+<div class=H>Click category = zoom in<br>Click doc = details + related<br>Click background = reset</div>
+<svg></svg>
+<script>
+const ND=[{"id":"gquas-guidebook-6th-edition-2024","n":"Gquas Guidebook 6th Edition 2024","cat":"checklist","cl":"Checklists","sc":"","rp":"checklist/gquas-guidebook-6th-edition-2024.md","su":"Gamuda Land Quality Assessment System (GQUAS) — based on Singapore BCA's CONQUAS system.","tg":[],"deg":0},{"id":"sdpb-industrial-building-design-checklist","n":"Sdpb Industrial Building Design Checklist","cat":"checklist","cl":"Checklists","sc":"","rp":"checklist/sdpb-industrial-building-design-checklist.md","su":"Internal developer design checklist for industrial property (semi-detached/link factory). Covers warehouse, office area, loading bay, toilet","tg":[],"deg":0},{"id":"sdpb-integrated-building-design-checklist","n":"Sdpb Integrated Building Design Checklist","cat":"checklist","cl":"Checklists","sc":"","rp":"checklist/sdpb-integrated-building-design-checklist.md","su":"Internal developer design checklist for integrated/high-rise property (SDPB — Syarati Development Practice/Best Practices). Covers common ar","tg":[],"deg":0},{"id":"sdpb-landed-building-design-checklist","n":"Sdpb Landed Building Design Checklist","cat":"checklist","cl":"Checklists","sc":"","rp":"checklist/sdpb-landed-building-design-checklist.md","su":"Internal developer design checklist for landed property (SDPB — Syarati Development Practice/Best Practices). Covers architecture, M&E, and","tg":[],"deg":0},{"id":"hose-reel-installation-height","n":"Hose Reel Installation Height","cat":"UBBL","cl":"UBBL","sc":"fire-safety","rp":"UBBL/fire-safety/hose-reel-installation-height.md","su":"","tg":[],"deg":1},{"id":"fire-services-act-1988-fire-certificate","n":"Fire Services Act 1988 Fire Certificate","cat":"UBBL","cl":"UBBL","sc":"","rp":"UBBL/fire-services-act-1988-fire-certificate.md","su":"The Fire Services Act, 1988 (Sections 27-36) introduces the Fire Certificate requirement for designated premises in Malaysia. Building owner","tg":[],"deg":0},{"id":"form-f1-partial-ccc","n":"Form F1 Partial Ccc","cat":"UBBL","cl":"UBBL","sc":"","rp":"UBBL/form-f1-partial-ccc.md","su":"source: \"UBBL/source-pdfs/2026-02-24_Form_F1.pdf\"","tg":["ubbl","form-f1","ccc","partial-completion","lam"],"deg":0},{"id":"ubbl-2021","n":"Ubbl 2021","cat":"UBBL","cl":"UBBL","sc":"","rp":"UBBL/ubbl-2021.md","su":"Jump directly: use 'Ctrl+F' or click a line number. Stars (⭐) = most commonly referenced.","tg":[],"deg":0},{"id":"spa-schedule-g","n":"SPA Schedule G","cat":"SPA","cl":"SPA","sc":"","rp":"SPA/SPA-Schedule-G.md","su":"[Content to be extracted from PDF]","tg":[],"deg":0},{"id":"spa-schedule-h","n":"SPA Schedule H","cat":"SPA","cl":"SPA","sc":"","rp":"SPA/SPA-Schedule-H.md","su":"[Content to be extracted from PDF]","tg":[],"deg":0},{"id":"pam2006-amendments-rev7","n":"Pam2006 Amendments Rev7","cat":"contracts","cl":"Contracts","sc":"","rp":"contracts/pam2006-amendments-rev7.md","su":"","tg":[],"deg":2},{"id":"pam2006","n":"Pam2006","cat":"contracts","cl":"Contracts","sc":"","rp":"contracts/pam2006.md","su":"The PAM 2006 contract was the standard form of building contract in Malaysia from 2006-2018. While superseded by PAM 2018, it remains releva","tg":[],"deg":1},{"id":"pam2018","n":"Pam2018","cat":"contracts","cl":"Contracts","sc":"","rp":"contracts/pam2018.md","su":"open /Users/yeomac/.openclaw/workspace/Yeo/Work/Contracts/PAM-2018/2026-03-31_PAM-Contract-2018-With-Quantities.pdf","tg":[],"deg":1},{"id":"sime-darby-tor-architect-2024","n":"Sime Darby Tor Architect 2024","cat":"Appointment","cl":"Appointment","sc":"","rp":"Appointment/sime-darby-tor-architect-2024.md","su":"","tg":[],"deg":2},{"id":"2025-general-circular-no-1-form-g8-fire-safety","n":"2025 General Circular No 1 Form G8 Fire Safety","cat":"LAM","cl":"LAM","sc":"circulars","rp":"LAM/circulars/2025-General-Circular-No-1-Form-G8-Fire-Safety.md","su":"[Content to be extracted from PDF]","tg":[],"deg":0},{"id":"2025-general-circular-no-2-form-g10-mechanical-ventilation","n":"2025 General Circular No 2 Form G10 Mechanical Ventilation","cat":"LAM","cl":"LAM","sc":"circulars","rp":"LAM/circulars/2025-General-Circular-No-2-Form-G10-Mechanical-Ventilation.md","su":"[Content to be extracted from PDF]","tg":[],"deg":0},{"id":"lam-gc-1-2008-ccc","n":"LAM GC 1 2008 CCC","cat":"LAM","cl":"LAM","sc":"circulars","rp":"LAM/circulars/LAM-GC-1-2008-CCC.md","su":"[Content to be extracted from PDF]","tg":[],"deg":0},{"id":"lam-gc-1-2024-architect-fees-stakeholder","n":"LAM GC 1 2024 Architect Fees Stakeholder","cat":"LAM","cl":"LAM","sc":"circulars","rp":"LAM/circulars/LAM-GC-1-2024-Architect-Fees-Stakeholder.md","su":"[Content to be extracted from PDF]","tg":[],"deg":0},{"id":"lam-gc-2-2010-form-f1","n":"LAM GC 2 2010 Form F1","cat":"LAM","cl":"LAM","sc":"circulars","rp":"LAM/circulars/LAM-GC-2-2010-Form-F1.md","su":"[Content to be extracted from PDF]","tg":[],"deg":0},{"id":"lam-gc-2-2017-hda-stage-claim","n":"LAM GC 2 2017 HDA Stage Claim","cat":"LAM","cl":"LAM","sc":"circulars","rp":"LAM/circulars/LAM-GC-2-2017-HDA-Stage-Claim.md","su":"","tg":[],"deg":0},{"id":"lam-gc-4-2023-cpd-guidelines","n":"LAM GC 4 2023 CPD Guidelines","cat":"LAM","cl":"LAM","sc":"circulars","rp":"LAM/circulars/LAM-GC-4-2023-CPD-Guidelines.md","su":"[Content to be extracted from PDF]","tg":[],"deg":0},{"id":"lam-superstructure-stage","n":"LAM Superstructure Stage","cat":"LAM","cl":"LAM","sc":"circulars","rp":"LAM/circulars/LAM-Superstructure-Stage.md","su":"[Content to be extracted from PDF]","tg":[],"deg":0},{"id":"2025-pam-practice-note-pn-2025-1-pcwd","n":"2025 PAM Practice Note PN 2025 1 PCWD","cat":"LAM","cl":"LAM","sc":"pam","rp":"LAM/pam/2025-PAM-Practice-Note-PN-2025-1-PCWD.md","su":"This Practice Note addresses the Occupational Safety and Health (Construction Work) (Design and Management) Regulations 2024, which came int","tg":[],"deg":1},{"id":"pn-2026-1-shop-drawings","n":"Pn 2026 1 Shop Drawings","cat":"LAM","cl":"LAM","sc":"pam","rp":"LAM/pam/pn-2026-1-shop-drawings.md","su":"Source PDF: 'LAM/guidelines/source-pdfs/PN-2026-1-Shop-Drawings.pdf'","tg":[],"deg":0},{"id":"pn2023-3-the-arch-resp-setting-out","n":"Pn2023 3 The Arch Resp Setting Out","cat":"LAM","cl":"LAM","sc":"pam","rp":"LAM/pam/pn2023-3-the-arch-resp-setting-out.md","su":"Source PDF: 'LAM/guidelines/source-pdfs/PN2023-3_TheArchResp_SettingOut.pdf'","tg":[],"deg":1},{"id":"pn2024-3-retention-under-contracts-2006-2018r","n":"Pn2024 3 Retention Under Contracts 2006 2018r","cat":"LAM","cl":"LAM","sc":"pam","rp":"LAM/pam/pn2024-3-retention-under-contracts-2006-2018r.md","su":"Source PDF: 'LAM/guidelines/source-pdfs/PN2024-3_Retention_under_Contracts_2006_2018r.pdf'","tg":[],"deg":1},{"id":"pn2025-1-pcwd-role-summary","n":"Pn2025 1 Pcwd Role Summary","cat":"LAM","cl":"LAM","sc":"pam","rp":"LAM/pam/pn2025-1-pcwd-role-summary.md","su":"Note: Full content available in '2025-PAM-Practice-Note-PN-2025-1-PCWD.md' — this file is a condensed reference.","tg":[],"deg":0},{"id":"pn2025-2-planning-statutory-append-abc","n":"Pn2025 2 Planning Statutory Append Abc","cat":"LAM","cl":"LAM","sc":"pam","rp":"LAM/pam/pn2025-2-planning-statutory-append-abc.md","su":"Source PDF: 'LAM/guidelines/source-pdfs/PN2025-2_Planning_Statutory_Append_ABC.pdf'","tg":[],"deg":0},{"id":"pn2026-2-cessation-of-practice","n":"Pn2026 2 Cessation Of Practice","cat":"LAM","cl":"LAM","sc":"pam","rp":"LAM/pam/pn2026-2-cessation-of-practice.md","su":"Source PDF: 'LAM/guidelines/source-pdfs/PN2026-2_Cessation_of_Practice.pdf'","tg":[],"deg":0},{"id":"pn2026-3-limitation-periods","n":"Pn2026 3 Limitation Periods","cat":"LAM","cl":"LAM","sc":"pam","rp":"LAM/pam/pn2026-3-limitation-periods.md","su":"Source PDF: 'LAM/guidelines/source-pdfs/PN2026-3_Limitation_Periods.pdf'","tg":[],"deg":0},{"id":"pn2026-6-contract-completion-part2","n":"Pn2026 6 Contract Completion Part2","cat":"LAM","cl":"LAM","sc":"pam","rp":"LAM/pam/pn2026-6-contract-completion-part2.md","su":"Source PDF: 'LAM/guidelines/source-pdfs/PN2026-6_Contract_Completion_Part2.pdf'","tg":[],"deg":0},{"id":"pn2026-9-cost-escalation-in-contracts","n":"Pn2026 9 Cost Escalation In Contracts","cat":"LAM","cl":"LAM","sc":"pam","rp":"LAM/pam/pn2026-9-cost-escalation-in-contracts.md","su":"PAM Practice Note addressing contractors' claims for additional payments due to market price increases caused by global supply disruptions (","tg":[],"deg":0},{"id":"ms-1184-2014-universal-design","n":"MS 1184 2014 Universal Design","cat":"codes","cl":"Codes","sc":"","rp":"codes/MS-1184-2014-Universal-Design.md","su":"","tg":[],"deg":0},{"id":"cis-10-2020-shassic","n":"Cis 10 2020 Shassic","cat":"codes","cl":"Codes","sc":"","rp":"codes/cis-10-2020-shassic.md","su":"To establish a standard system for OSH assessment in construction, evaluate contractor OSH performance, and benchmark OSH levels across the","tg":[],"deg":0},{"id":"cis-7-2021-qlassic","n":"Cis 7 2021 Qlassic","cat":"codes","cl":"Codes","sc":"","rp":"codes/cis-7-2021-qlassic.md","su":"","tg":[],"deg":0},{"id":"ms-1017-2022-aluminium-framed-glass-sliding-doors","n":"Ms 1017 2022 Aluminium Framed Glass Sliding Doors","cat":"codes","cl":"Codes","sc":"","rp":"codes/ms-1017-2022-aluminium-framed-glass-sliding-doors.md","su":"Applies to aluminium framed sliding glass doors: two or more glazed panels contained in aluminium frames and movable by sliding in a horizon","tg":[],"deg":0},{"id":"ms-1183-2015-fire-safety","n":"Ms 1183 2015 Fire Safety","cat":"codes","cl":"Codes","sc":"","rp":"codes/ms-1183-2015-fire-safety.md","su":"Defines purpose of the Code of Practice (fire safety in design, management and use of buildings)","tg":[],"deg":0},{"id":"ms-1539-part3-2003-portable-fire-extinguisher","n":"Ms 1539 Part3 2003 Portable Fire Extinguisher","cat":"codes","cl":"Codes","sc":"","rp":"codes/ms-1539-part3-2003-portable-fire-extinguisher.md","su":"","tg":[],"deg":0},{"id":"ms-1553-2002-wind-loading","n":"Ms 1553 2002 Wind Loading","cat":"codes","cl":"Codes","sc":"","rp":"codes/ms-1553-2002-wind-loading.md","su":"Applies to wind loading (not tornadoes/typhoons) on structures that meet all of:","tg":[],"deg":0},{"id":"ms-2680-2017-energy-efficiency-residential","n":"Ms 2680 2017 Energy Efficiency Residential","cat":"codes","cl":"Codes","sc":"","rp":"codes/ms-2680-2017-energy-efficiency-residential.md","su":"Applies to design, material selection, appliance selection and efficient use of energy (including renewable energy) in new and existing resi","tg":[],"deg":0},{"id":"ms-832-2022-aluminium-alloy-windows","n":"Ms 832 2022 Aluminium Alloy Windows","cat":"codes","cl":"Codes","sc":"","rp":"codes/ms-832-2022-aluminium-alloy-windows.md","su":"Applies to aluminium alloy windows: materials, construction, finishes, hardware, and performance standards","tg":[],"deg":0},{"id":"gpp-evcb-2023","n":"Gpp Evcb 2023","cat":"guidelines","cl":"Guidelines","sc":"","rp":"guidelines/gpp-evcb-2023.md","su":"Guide State Authorities (PBN), Local Authorities (PBT), and stakeholders in planning, designing, and providing electric vehicle charging bay","tg":[],"deg":1},{"id":"greenre-res-scorecard-v3-3","n":"Greenre Res Scorecard V3.3","cat":"guidelines","cl":"Guidelines","sc":"green-re","rp":"guidelines/green-re/greenre-res-scorecard-v3.3.md","su":"GreenRE rating tool for high-rise residential buildings (RES v3.3). Total max score: 115 points.","tg":[],"deg":0},{"id":"msma-chapter-4-roof-drainage","n":"Msma Chapter 4 Roof Drainage","cat":"guidelines","cl":"Guidelines","sc":"","rp":"guidelines/msma-chapter-4-roof-drainage.md","su":"The MSMA 2nd Edition Chapter 4 provides comprehensive technical guidelines for designing roof and property drainage systems in Malaysia. It","tg":[],"deg":2},{"id":"dbkl-gp4-carpark-guidelines-2018","n":"Dbkl Gp4 Carpark Guidelines 2018","cat":"guidelines","cl":"Guidelines","sc":"kuala-lumpur","rp":"guidelines/state-guidelines/kuala-lumpur/dbkl-gp4-carpark-guidelines-2018.md","su":"DBKL GP4 guidelines for car parking and internal traffic circulation, published 2018 by Jabatan Perancangan Infrastruktur, Dewan Bandaraya K","tg":[],"deg":0},{"id":"dbkl-gpp-akses-oku-v2-2024","n":"Dbkl Gpp Akses Oku V2 2024","cat":"guidelines","cl":"Guidelines","sc":"kuala-lumpur","rp":"guidelines/state-guidelines/kuala-lumpur/dbkl-gpp-akses-oku-v2-2024.md","su":"Comprehensive universal design / accessibility guideline for persons with disabilities (OKU — Orang Kurang Upaya) published by DBKL Jabatan","tg":[],"deg":0},{"id":"dbkl-gpp-tlk-wpkl-2024","n":"Dbkl Gpp Tlk Wpkl 2024","cat":"guidelines","cl":"Guidelines","sc":"kuala-lumpur","rp":"guidelines/state-guidelines/kuala-lumpur/dbkl-gpp-tlk-wpkl-2024.md","su":"Garis Panduan Perancangan Tempat Letak Kenderaan (TLK) di Wilayah Persekutuan Kuala Lumpur, Edisi 2024. Replaces Edisi 2021. Provides minimu","tg":[],"deg":0},{"id":"gpp-pangsapuri-servis-dbkl-2020","n":"Gpp Pangsapuri Servis Dbkl 2020","cat":"guidelines","cl":"Guidelines","sc":"kuala-lumpur","rp":"guidelines/state-guidelines/kuala-lumpur/gpp-pangsapuri-servis-dbkl-2020.md","su":"Explain planning controls for Serviced Apartment (Pangsapuri Servis) development in WP Kuala Lumpur.","tg":[],"deg":0},{"id":"dasar-rumah-selangorku-3-0","n":"Dasar Rumah Selangorku 3.0","cat":"guidelines","cl":"Guidelines","sc":"selangor","rp":"guidelines/state-guidelines/selangor/Dasar-Rumah-Selangorku-3.0.md","su":"","tg":[],"deg":3},{"id":"jpbd-commercial-planning-guidelines","n":"JPBD Commercial Planning Guidelines","cat":"guidelines","cl":"Guidelines","sc":"selangor","rp":"guidelines/state-guidelines/selangor/JPBD-Commercial-Planning-Guidelines.md","su":"","tg":[],"deg":3},{"id":"jpbd-gfa-definition","n":"JPBD GFA Definition","cat":"guidelines","cl":"Guidelines","sc":"selangor","rp":"guidelines/state-guidelines/selangor/JPBD-GFA-Definition.md","su":"topic: selangor-gfa-plot-ratio","tg":["selangor","jpbd","gfa","plot-ratio","nisbah-plot","ruang-lantai"],"deg":0},{"id":"jpbd-housing-guidelines","n":"JPBD Housing Guidelines","cat":"guidelines","cl":"Guidelines","sc":"selangor","rp":"guidelines/state-guidelines/selangor/JPBD-Housing-Guidelines.md","su":"","tg":[],"deg":4},{"id":"jpbd-industrial-guidelines","n":"JPBD Industrial Guidelines","cat":"guidelines","cl":"Guidelines","sc":"selangor","rp":"guidelines/state-guidelines/selangor/JPBD-Industrial-Guidelines.md","su":"","tg":[],"deg":0},{"id":"rumah-selangorku-harapan-guidelines","n":"Rumah Selangorku Harapan Guidelines","cat":"guidelines","cl":"Guidelines","sc":"selangor","rp":"guidelines/state-guidelines/selangor/Rumah-Selangorku-Harapan-Guidelines.md","su":"","tg":[],"deg":3},{"id":"strata-share-unit-calculation","n":"Strata Share Unit Calculation","cat":"guidelines","cl":"Guidelines","sc":"","rp":"guidelines/strata-share-unit-calculation.md","su":"The SMA 2013 sought to provide a uniform share unit formula across different states within Peninsular Malaysia.","tg":[],"deg":0},{"id":"act133-street-drainage-building-1974","n":"Act133 Street Drainage Building 1974","cat":"regulations","cl":"Regulations","sc":"","rp":"regulations/act133-street-drainage-building-1974.md","su":"","tg":[],"deg":2},{"id":"act172-town-country-planning-1976","n":"Act172 Town Country Planning 1976","cat":"regulations","cl":"Regulations","sc":"","rp":"regulations/act172-town-country-planning-1976.md","su":"","tg":[],"deg":2},{"id":"dosh-mykkp-pemtk","n":"Dosh Mykkp Pemtk","cat":"regulations","cl":"Regulations","sc":"","rp":"regulations/dosh-mykkp-pemtk.md","su":"PEMTK (*Pendaftaran Tempat Kerja*) = your company's workplace registration number on MyKKP","tg":[],"deg":0},{"id":"hirarc-2008","n":"Hirarc 2008","cat":"regulations","cl":"Regulations","sc":"","rp":"regulations/hirarc-2008.md","su":"HIRARC = Hazard Identification, Risk Assessment and Risk Control — the core risk management framework under Malaysia's OSH legal framework.","tg":[],"deg":0},{"id":"osh-construction-design-management-2024","n":"Osh Construction Design Management 2024","cat":"regulations","cl":"Regulations","sc":"","rp":"regulations/osh-construction-design-management-2024.md","su":"These regulations implement safety and health duties for construction projects in Malaysia, assigning specific responsibilities to clients,","tg":[],"deg":0},{"id":"spc-installation","n":"SPC Installation","cat":"materials","cl":"Materials","sc":"","rp":"materials/SPC-installation.md","su":"'materials/source-pdfs/2026-07-25_Quick-Step-Uniclic-Installation-Instructions.pdf'","tg":[],"deg":1},{"id":"spc","n":"SPC","cat":"materials","cl":"Materials","sc":"","rp":"materials/SPC.md","su":"MY FLOOR - X is a 5.0mm SPC (Stone Plastic Composite) interlocking flooring system. Marketed as \"Germany Technology Flooring\" with click-loc","tg":[],"deg":1},{"id":"ytl-cement-quickmix-product-catalog","n":"YTL Cement QuickMix Product Catalog","cat":"materials","cl":"Materials","sc":"","rp":"materials/YTL-Cement-QuickMix-Product-Catalog.md","su":"Comprehensive product catalog from YTL Cement's QuickMix brand covering eco-friendly construction solutions for walls and floors. 25+ produc","tg":[],"deg":0},{"id":"sikawall-603-acrylic","n":"Sikawall 603 Acrylic","cat":"materials","cl":"Materials","sc":"","rp":"materials/sikawall-603-acrylic.md","su":"SikaWall®-603 Acrylic is a ready-to-use acrylic skim smoothing rendering paste for levelling uneven surfaces and repairing surface defects i","tg":[],"deg":1},{"id":"tile-slip-resistance-standards","n":"Tile Slip Resistance Standards","cat":"materials","cl":"Materials","sc":"","rp":"materials/tile-slip-resistance-standards.md","su":"There is no standalone Malaysian standard (MS) for tile slip resistance. The Malaysian market and specification practice typically follows:","tg":[],"deg":2},{"id":"span-utg-2018","n":"Span Utg 2018","cat":"utilities","cl":"Utilities","sc":"","rp":"utilities/span-utg-2018.md","su":"The SPAN Uniform Technical Guidelines (UTG) standardises the planning, design, construction, and handover of water distribution systems acro","tg":[],"deg":0},{"id":"st-domestic-wiring-guidelines-2024","n":"St Domestic Wiring Guidelines 2024","cat":"utilities","cl":"Utilities","sc":"","rp":"utilities/st-domestic-wiring-guidelines-2024.md","su":"Issued under Section 50C of the Electricity Supply Act 1990 [Act 447] . Serves as a guide for all wiremen and electrical contractors for dom","tg":[],"deg":0},{"id":"approved-me-vendor-list","n":"Approved Me Vendor List","cat":"spec","cl":"Specs","sc":"","rp":"spec/approved-me-vendor-list.md","su":"Source PDF: 'spec/source-pdfs/ME_Service_Vendor_List---f4a8602b-6f69-436e-809b-3cfbc3e8c561.pdf'","tg":[],"deg":0},{"id":"bungalow-lot-3133-eco-majestic-spa","n":"Bungalow Lot 3133 Eco Majestic Spa","cat":"Sky","cl":"Sky","sc":"","rp":"Sky/bungalow-lot-3133-eco-majestic-spa.md","su":"Note: PDF is image-based (scanned, no selectable text). Extracted via AI vision analysis. Verify key figures against source for compliance w","tg":[],"deg":0}],ED=[{"s":"hose-reel-installation-height","t":"ubbl-2021"},{"s":"pam2006-amendments-rev7","t":"pam2006"},{"s":"pam2006-amendments-rev7","t":"pam2018"},{"s":"pam2006","t":"pam2018"},{"s":"sime-darby-tor-architect-2024","t":"pam2018"},{"s":"sime-darby-tor-architect-2024","t":"ubbl-2021"},{"s":"2025-pam-practice-note-pn-2025-1-pcwd","t":"ubbl-2021"},{"s":"pn2023-3-the-arch-resp-setting-out","t":"pam2018"},{"s":"pn2024-3-retention-under-contracts-2006-2018r","t":"pam2018"},{"s":"gpp-evcb-2023","t":"act133-street-drainage-building-1974"},{"s":"msma-chapter-4-roof-drainage","t":"ubbl-2021"},{"s":"msma-chapter-4-roof-drainage","t":"hose-reel-installation-height"},{"s":"dasar-rumah-selangorku-3-0","t":"jpbd-housing-guidelines"},{"s":"dasar-rumah-selangorku-3-0","t":"rumah-selangorku-harapan-guidelines"},{"s":"dasar-rumah-selangorku-3-0","t":"jpbd-commercial-planning-guidelines"},{"s":"jpbd-commercial-planning-guidelines","t":"jpbd-housing-guidelines"},{"s":"jpbd-commercial-planning-guidelines","t":"rumah-selangorku-harapan-guidelines"},{"s":"jpbd-commercial-planning-guidelines","t":"pam2018"},{"s":"jpbd-housing-guidelines","t":"jpbd-gfa-definition"},{"s":"jpbd-housing-guidelines","t":"rumah-selangorku-harapan-guidelines"},{"s":"jpbd-housing-guidelines","t":"pam2018"},{"s":"rumah-selangorku-harapan-guidelines","t":"pam2018"},{"s":"act133-street-drainage-building-1974","t":"ubbl-2021"},{"s":"act133-street-drainage-building-1974","t":"lam-gc-2-2017-hda-stage-claim"},{"s":"act172-town-country-planning-1976","t":"act133-street-drainage-building-1974"},{"s":"act172-town-country-planning-1976","t":"ubbl-2021"},{"s":"spc-installation","t":"spc"},{"s":"spc","t":"tile-slip-resistance-standards"},{"s":"sikawall-603-acrylic","t":"msma-chapter-4-roof-drainage"},{"s":"tile-slip-resistance-standards","t":"spc-installation"}],CC={"checklist":"#2D6473","UBBL":"#8B4513","SPA":"#4A7C59","contracts":"#6B3FA0","Appointment":"#C9742E","LAM":"#1A6B8A","codes":"#5B7B9A","guidelines":"#3A7D5C","regulations":"#B34A4A","materials":"#7A7A5A","utilities":"#5A8A8A","spec":"#6A6A8A","Sky":"#4FB3D9"},CL={"checklist":"Checklists","UBBL":"UBBL","SPA":"SPA","contracts":"Contracts","Appointment":"Appointment","LAM":"LAM","codes":"Codes","guidelines":"Guidelines","regulations":"Regulations","materials":"Materials","utilities":"Utilities","spec":"Specs","Sky":"Sky"};
+let W=window.innerWidth,H=window.innerHeight;
+const svg=d3.select('svg').attr('width',W).attr('height',H);
+const g=svg.append('g');
+const nbr=new Map(ND.map(d=>[d.id,new Set()]));
+for(const e of ED){if(nbr.has(e.s))nbr.get(e.s).add(e.t);if(nbr.has(e.t))nbr.get(e.t).add(e.s);}
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const sl=n=>n.length>22?n.slice(0,21)+'...':n;
+const pack=d3.pack().size([W,H]).padding(d=>d.depth===0?10:2);
+let root=null,nodeMap=new Map();
+function buildData(){
+  const q=document.getElementById('S').value.toLowerCase().trim();
+  const chips=[...document.querySelectorAll('.cf')];
+  const on=chips.filter(c=>c.classList.contains('on'));
+  const cats=new Set(on.length?on.map(c=>c.dataset.c):chips.map(c=>c.dataset.c));
+  const leaves=ND.filter(d=>cats.has(d.cat)&&(!q||d.n.toLowerCase().includes(q)||d.cl.toLowerCase().includes(q)||(d.su||'').toLowerCase().includes(q)||(d.tg||[]).some(t=>t.toLowerCase().includes(q))));
+  const by=new Map();
+  for(const d of leaves){if(!by.has(d.cat))by.set(d.cat,[]);by.get(d.cat).push(d);}
+  return {name:'root',children:[...by.entries()].map(e=>({name:e[0],children:e[1].map(d=>({id:d.id,n:d.n,cat:d.cat,value:d.deg+1}))}))};
+}
+function render(){
+  g.selectAll('*').remove();
+  const data=buildData();if(!data.children.length)return;
+  root=pack(d3.hierarchy(data).sum(d=>d.value).sort((a,b)=>b.value-a.value));
+  nodeMap=new Map();
+  root.each(n=>{if(n.data.id)nodeMap.set(n.data.id,n);});
+  const gs=g.selectAll('g').data(root.descendants()).join('g')
+    .attr('transform',d=>'translate('+d.x+','+d.y+')')
+    .style('cursor',d=>d.depth===1?'pointer':'default')
+    .on('click',(ev,d)=>{ev.stopPropagation();if(d.depth===1){zoomTo(d,450);}else if(d.depth===2){clearHL();highlight(d.data.id);openPanel(d.data.id);}});
+  gs.filter(d=>d.depth>0).append('circle')
+    .attr('r',d=>d.r)
+    .attr('fill',d=>d.depth===1?(CC[d.data.name]||'#888'):(CC[d.data.cat]||'#888'))
+    .attr('fill-opacity',d=>d.depth===1?0.12:1)
+    .attr('stroke',d=>d.depth===1?'rgba(255,255,255,.22)':'rgba(255,255,255,.07)')
+    .attr('stroke-width',d=>d.depth===1?1.6:0.5)
+    .attr('opacity',d=>d.depth===1?0.5:0.88);
+  gs.filter(d=>d.depth===1).append('text').attr('class','lab1')
+    .attr('text-anchor','middle').attr('dy','.35em')
+    .attr('fill','rgba(255,255,255,.85)')
+    .style('font-size',d=>Math.max(11,Math.min(20,d.r*0.16))+'px')
+    .style('font-weight',600).text(d=>d.data.name);
+  gs.filter(d=>d.depth===2).append('text').attr('class','lab2')
+    .attr('text-anchor','middle').attr('dy','.35em')
+    .attr('fill','#fff')
+    .style('font-size',d=>Math.max(7,Math.min(15,d.r*0.22))+'px')
+    .text(d=>sl(d.data.n||d.data.id));
+  gs.filter(d=>d.depth===2).on('mouseenter',(ev,d)=>{TTn.text(d.data.n||d.data.id);TTc.text(CL[d.data.cat]||d.data.cat);TT.style('display','block').style('left',Math.min(ev.clientX+14,W-280)+'px').style('top',Math.min(ev.clientY+14,H-120)+'px');})
+    .on('mousemove',ev=>{TT.style('left',Math.min(ev.clientX+14,W-280)+'px').style('top',Math.min(ev.clientY+14,H-120)+'px');})
+    .on('mouseleave',()=>{TT.style('display','none');});
+}
+const zoom=d3.zoom().scaleExtent([1,64]).on('zoom',ev=>{
+  const k=ev.transform.k;
+  g.attr('transform',ev.transform);
+  g.selectAll('text.lab2').attr('display',d=>d.r*k>16?null:'none');
+  g.selectAll('text.lab1').attr('display',d=>d.r*k>34?null:'none');
+});
+svg.call(zoom);
+function zoomTo(n,dur){
+  if(!n)return;
+  const k=Math.max(1,Math.min(64,(Math.min(W,H)*0.92)/(2*n.r)));
+  const t=d3.zoomIdentity.translate(W/2-n.x*k,H/2-n.y*k).scale(k);
+  if(dur)svg.transition().duration(dur).call(zoom.transform,t);else svg.call(zoom.transform,t);
+}
+svg.on('click',ev=>{if(ev.target===svg.node()){zoomTo(root,450);clearHL();closePanel();}});
+function clearHL(){
+  g.selectAll('circle').attr('opacity',d=>d.depth===1?0.5:0.88)
+    .attr('stroke',d=>d.depth===1?'rgba(255,255,255,.22)':'rgba(255,255,255,.07)')
+    .attr('stroke-width',d=>d.depth===1?1.6:0.5);
+}
+function highlight(id){
+  const ns=nbr.get(id)||new Set();ns.add(id);
+  g.selectAll('circle').attr('opacity',d=>d.depth===2?(ns.has(d.data.id)?1:0.05):0.15)
+    .attr('stroke',d=>d.depth===2&&d.data.id===id?'#fff':'rgba(255,255,255,.07)')
+    .attr('stroke-width',d=>d.data.id===id?2:0.5);
+}
+function closePanel(){document.getElementById('D').style.display='none';}
+function openPanel(id){
+  const d=ND.find(x=>x.id===id);if(!d)return;
+  const rel=[...(nbr.get(id)||[])].map(n=>ND.find(x=>x.id===n)).filter(Boolean);
+  const chip=rel.length?rel.map(r=>'<button class=rc data-id="'+r.id+'">'+esc(sl(r.n))+'</button>').join(''):'<span class=no>No cross-references</span>';
+  document.getElementById('Dc').innerHTML=
+    '<div class=dh><span class=dot style="background:'+CC[d.cat]+'"></span><span class=dn>'+esc(d.n)+'</span><button id=Db>x</button></div>'+
+    '<div class=dc>'+esc(d.cl)+(d.sc?' / '+esc(d.sc.replace(/[-_]/g,' ')):'')+'</div>'+
+    '<div class=ds>'+esc(d.su)+'</div>'+
+    '<div class=dr><b>'+d.deg+' connection'+(d.deg!==1?'s':'')+'</b> - '+esc(d.rp)+'</div>'+
+    '<div class=rh>Related</div><div class=rr>'+chip+'</div>';
+  document.getElementById('D').style.display='block';
+  document.querySelectorAll('.rc').forEach(b=>{b.onclick=()=>focusDoc(b.dataset.id);});
+  document.getElementById('Db').onclick=()=>{closePanel();clearHL();};
+}
+function focusDoc(id){
+  document.querySelectorAll('.cf').forEach(c=>c.classList.add('on'));
+  document.getElementById('S').value='';
+  render();
+  const n=nodeMap.get(id);if(!n)return;
+  if(n.parent)zoomTo(n.parent,500);
+  highlight(id);openPanel(id);
+}
+const TT=d3.select('#T'),TTn=TT.select('.tn'),TTc=TT.select('.tc');
+const cats=[...new Set(ND.map(d=>d.cat))].sort();
+const FC=d3.select('#Fl');
+cats.forEach(c=>{FC.append('span').attr('class','cf on').attr('data-c',c)
+  .html('<span class=d style="background:'+CC[c]+'"></span>'+CL[c])
+  .on('click',function(){const el=d3.select(this);el.classed('on',!el.classed('on'));if(!document.querySelector('.cf.on'))d3.selectAll('.cf').classed('on',true);render();clearHL();closePanel();zoomTo(root,0);});});
+const LG=d3.select('#L');
+cats.forEach(c=>{LG.append('span').attr('class','li').html('<span class=d style="background:'+CC[c]+'"></span>'+CL[c]);});
+document.getElementById('S').addEventListener('input',()=>{render();clearHL();closePanel();zoomTo(root,0);});
+document.addEventListener('keydown',ev=>{if(ev.key==='Escape'){closePanel();clearHL();}});
+window.addEventListener('resize',()=>{W=window.innerWidth;H=window.innerHeight;svg.attr('width',W).attr('height',H);pack.size([W,H]);render();zoomTo(root,0);});
+render();zoomTo(root,0);
+</script>
