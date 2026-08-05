@@ -57,7 +57,7 @@ for(const e of ED){if(nbr.has(e.s))nbr.get(e.s).add(e.t);if(nbr.has(e.t))nbr.get
 const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const sl=n=>n.length>22?n.slice(0,21)+'...':n;
 const pack=d3.pack().size([W,H]).padding(d=>d.depth===0?10:2);
-let root=null,nodeMap=new Map();
+let root=null,nodeMap=new Map(),focus=null;
 function buildData(){
   const q=document.getElementById('S').value.toLowerCase().trim();
   const chips=[...document.querySelectorAll('.cf')];
@@ -86,9 +86,11 @@ function render(){
     .attr('stroke-width',d=>d.depth===1?1.6:0.5)
     .attr('opacity',d=>d.depth===1?0.5:0.88);
   gs.filter(d=>d.depth===1).append('text').attr('class','lab1')
-    .attr('text-anchor','middle').attr('dy','.35em')
-    .attr('fill','rgba(255,255,255,.85)')
-    .style('font-size',d=>Math.max(11,Math.min(20,d.r*0.16))+'px')
+    .attr('text-anchor','middle')
+    .attr('x',d=>Math.max(40,Math.min(W-40,d.x))-d.x)
+    .attr('y',d=>-d.r-7)
+    .attr('fill','rgba(255,255,255,.8)')
+    .style('font-size',d=>Math.max(11,Math.min(15,d.r*0.12))+'px')
     .style('font-weight',600).text(d=>d.data.name);
   gs.filter(d=>d.depth===2).append('text').attr('class','lab2')
     .attr('text-anchor','middle').attr('dy','.35em')
@@ -103,13 +105,15 @@ const zoom=d3.zoom().scaleExtent([1,64]).on('zoom',ev=>{
   const k=ev.transform.k;
   g.attr('transform',ev.transform);
   g.selectAll('text.lab2').attr('display',d=>(d.r*k>40||k>1.2)?null:'none');
-  g.selectAll('text.lab1').attr('display',d=>d.r*k>34?null:'none');
+  g.selectAll('text.lab1').attr('display',d=>k>1.2?'none':null);
 });
 svg.call(zoom);
 function zoomTo(n,dur){
   if(!n)return;
   const k=Math.max(1,Math.min(64,(Math.min(W,H)*0.92)/(2*n.r)));
   const t=d3.zoomIdentity.translate(W/2-n.x*k,H/2-n.y*k).scale(k);
+  focus=n.depth===1?n.data.name:null;
+  document.querySelector('#P .s').textContent=focus?(focus+' - '+ND.filter(d=>d.cat===focus).length+' docs'):(ND.length+' docs - '+ED.length+' cross-references');
   if(dur)svg.transition().duration(dur).call(zoom.transform,t);else svg.call(zoom.transform,t);
 }
 svg.on('click',ev=>{if(ev.target===svg.node()){zoomTo(root,450);clearHL();closePanel();}});
