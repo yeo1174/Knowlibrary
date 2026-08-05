@@ -90,7 +90,7 @@ function render(){
     .attr('x',d=>Math.max(40,Math.min(W-40,d.x))-d.x)
     .attr('y',d=>-d.r-7)
     .attr('fill',d=>CCL[d.data.name]||'rgba(255,255,255,.8)')
-    .style('font-size',d=>Math.max(11,Math.min(15,d.r*0.12))+'px')
+    .style('font-size',d=>Math.max(16,Math.min(22,d.r*0.18))+'px')
     .style('font-weight',600).text(d=>d.data.name);
   gs.filter(d=>d.depth===2).append('text').attr('class','lab2')
     .attr('text-anchor','middle').attr('dy','.35em')
