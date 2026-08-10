@@ -3,388 +3,249 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Knowledge Library - Content Table</title>
+<title>Knowledge Library — Dashboard</title>
 <style>
   :root {
     --primary: #2D6473;
+    --primary-dark: #1f4854;
     --accent: #427381;
     --accent-light: #81A2AB;
-    --bg: #f5f7f8;
+    --bg: #eef2f4;
     --card-bg: #ffffff;
-    --border: #d0d8dc;
+    --border: #d5dde1;
     --text: #1a2a30;
     --text-light: #5a6e78;
+    --ok: #2e7d4f;
+    --ok-bg: #e3f2e9;
+    --warn: #b07a1e;
+    --warn-bg: #fdf3e0;
+    --chip-bg: #e8eef0;
+    --shadow: 0 1px 3px rgba(26,42,48,.08);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.6;
-    padding: 40px 20px;
-    max-width: 1200px;
+    line-height: 1.55;
+    padding: 28px 20px 40px;
+    max-width: 1280px;
     margin: 0 auto;
   }
   header {
-    background: linear-gradient(135deg, var(--primary), var(--accent));
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary), var(--accent));
     color: #fff;
-    padding: 40px 48px;
-    border-radius: 12px;
-    margin-bottom: 36px;
+    padding: 32px 40px;
+    border-radius: 14px;
+    margin-bottom: 22px;
+    box-shadow: var(--shadow);
   }
-  header h1 {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
+  header .top-row {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;
   }
-  header p {
-    margin-top: 8px;
-    opacity: 0.85;
-    font-size: 15px;
+  header h1 { font-size: 26px; font-weight: 700; letter-spacing: -.3px; }
+  header p { margin-top: 6px; opacity: .85; font-size: 14px; }
+  .nav-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .nav-links a {
+    background: rgba(255,255,255,.16); color: #fff; text-decoration: none;
+    padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    transition: background .15s;
   }
-  .stats-row {
-    display: flex;
-    gap: 24px;
-    margin-top: 16px;
-    flex-wrap: wrap;
+  .nav-links a:hover { background: rgba(255,255,255,.3); }
+  .kpi-row {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px; margin-bottom: 22px;
   }
-  .stat {
-    background: rgba(255,255,255,0.15);
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 13px;
+  .kpi {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 18px; box-shadow: var(--shadow);
   }
-  .graf-link {
-    display: inline-block;
-    background: rgba(255,255,255,0.2);
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 13px;
-    color: #fff;
-    text-decoration: none;
-    transition: background .2s;
+  .kpi .num { font-size: 26px; font-weight: 700; color: var(--primary); line-height: 1.1; }
+  .kpi .lbl { font-size: 12px; color: var(--text-light); text-transform: uppercase; letter-spacing: .6px; margin-top: 4px; font-weight: 600; }
+  .kpi .sub { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+  .controls {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+    padding: 16px 18px; margin-bottom: 22px; box-shadow: var(--shadow);
+    display: flex; flex-direction: column; gap: 12px;
   }
-  .graf-link:hover {
-    background: rgba(255,255,255,0.35);
+  .search-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  #search {
+    flex: 1; min-width: 240px; padding: 10px 14px; border: 1px solid var(--border);
+    border-radius: 8px; font-size: 14px; outline: none; background: #fafcfc;
   }
-  .section {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    margin-bottom: 20px;
-    overflow: hidden;
+  #search:focus { border-color: var(--accent); background: #fff; }
+  .count-hint { font-size: 12px; color: var(--text-light); white-space: nowrap; }
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    border: 1px solid var(--border); background: #fff; color: var(--text);
+    padding: 5px 12px; border-radius: 20px; font-size: 12.5px; cursor: pointer;
+    transition: all .15s; font-weight: 500;
   }
-  .section-header {
-    background: var(--accent);
-    color: #fff;
-    padding: 14px 24px;
-    font-size: 17px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: default;
+  .chip:hover { border-color: var(--accent); }
+  .chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .two-col {
+    display: grid; grid-template-columns: 1.9fr 1fr; gap: 20px; align-items: start;
   }
-  .section-header .badge {
-    background: rgba(255,255,255,0.2);
-    padding: 2px 10px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: 500;
+  @media (max-width: 980px) { .two-col { grid-template-columns: 1fr; } }
+  .panel {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px;
   }
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  .panel-head {
+    padding: 13px 20px; font-size: 15px; font-weight: 600; color: var(--text);
+    border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px;
   }
-  th {
-    text-align: left;
-    padding: 10px 24px;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--text-light);
-    background: #f0f3f5;
-    border-bottom: 1px solid var(--border);
-    font-weight: 600;
+  .panel-head .badge {
+    background: var(--chip-bg); color: var(--primary); padding: 2px 10px;
+    border-radius: 12px; font-size: 11.5px; font-weight: 600;
   }
-  td {
-    padding: 10px 24px;
-    border-bottom: 1px solid #eef2f4;
-    font-size: 14px;
-    vertical-align: top;
+  .doc-row {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 10px 20px; border-bottom: 1px solid #eef2f4; font-size: 14px;
   }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #f8fafb; }
-  .doc-name {
-    font-weight: 500;
-    color: var(--primary);
-    white-space: nowrap;
-  }
-  .doc-sub {
-    font-size: 12px;
-    color: var(--text-light);
-  }
-  .trigger {
-    display: inline-block;
-    background: #e8eef0;
-    color: var(--primary);
-    padding: 1px 8px;
-    border-radius: 4px;
+  .doc-row:last-child { border-bottom: none; }
+  .doc-row:hover { background: #f8fafb; }
+  .doc-main { min-width: 0; }
+  .doc-name { font-weight: 500; color: var(--text); }
+  .doc-meta { font-size: 12px; color: var(--text-light); margin-top: 1px; }
+  .tag {
+    display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;
     font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 11px;
-    font-weight: 500;
   }
-  .sub-section td:first-child { padding-left: 48px; }
-  .sub-section .doc-name { font-size: 13px; }
-  footer {
-    text-align: center;
-    padding: 32px 0 12px;
-    color: var(--text-light);
-    font-size: 13px;
+  .tag-trigger { background: #e8eef0; color: var(--primary); }
+  .tag-verified { background: var(--ok-bg); color: var(--ok); }
+  .tag-source { background: #e8eff5; color: #2d5a8a; }
+  .tag-new { background: var(--warn-bg); color: var(--warn); }
+  .recent-item {
+    padding: 10px 20px; border-bottom: 1px solid #eef2f4; font-size: 13.5px;
+    display: flex; justify-content: space-between; gap: 10px; align-items: center;
   }
-  @media (max-width: 768px) {
-    header { padding: 28px 20px; }
-    header h1 { font-size: 22px; }
-    td, th { padding: 8px 16px; }
-    .sub-section td:first-child { padding-left: 32px; }
-    .doc-name { white-space: normal; }
-    .graf-link { font-size: 12px; padding: 4px 10px; }
-  }
+  .recent-item:last-child { border-bottom: none; }
+  .recent-item:hover { background: #f8fafb; }
+  .recent-date { font-size: 12px; color: var(--text-light); white-space: nowrap; }
+  .empty { padding: 30px; text-align: center; color: var(--text-light); font-size: 14px; }
+  footer { text-align: center; padding: 18px 0 4px; color: var(--text-light); font-size: 13px; }
 </style>
 </head>
 <body>
 <header>
-  <h1>Knowledge Library</h1>
-  <p>Architectural & regulatory reference — Malaysian building standards, contracts, circulars, and guidelines</p>
-  <div class="stats-row">
-    <span class="stat">12 sections</span>
-    <span class="stat">99 documents</span>
-    <a href="bubbles.html" class="graf-link">Knowledge Graph</a>
-    <span class="stat">Auto-generated: 2026-08-06</span>
+  <div class="top-row">
+    <div>
+      <h1>Knowledge Library</h1>
+      <p>Architectural &amp; regulatory reference — Malaysian building standards, contracts, circulars, and guidelines</p>
+    </div>
+    <div class="nav-links">
+      <a href="bubbles.html">Knowledge Map</a>
+    </div>
   </div>
 </header>
 
-<div class="section">
-  <div class="section-header">
-    <span>Design Checklists</span>
-    <span class="badge">SDPB/PDI Best Practices</span>
-  </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">gquas-guidebook-6th-edition-2024</td><td></td></tr>
-      <tr><td class="doc-name">sdpb-industrial-building-design-checklist</td><td></td></tr>
-      <tr><td class="doc-name">sdpb-integrated-building-design-checklist</td><td></td></tr>
-      <tr><td class="doc-name">sdpb-landed-building-design-checklist</td><td></td></tr>
-    </tbody>
-  </table>
+<div class="kpi-row">
+  <div class="kpi"><div class="num">100</div><div class="lbl">Documents</div><div class="sub">across 13 sections</div></div>
+  <div class="kpi"><div class="num">50</div><div class="lbl">Quick Lookups</div><div class="sub">kl-* voice triggers</div></div>
+  <div class="kpi"><div class="num">85</div><div class="lbl">Source PDFs</div><div class="sub">linked &amp; traceable</div></div>
+  <div class="kpi"><div class="num">15</div><div class="lbl">Verified</div><div class="sub">cross-checked vs source</div></div>
+  <div class="kpi"><div class="num">8</div><div class="lbl">Recently Updated</div><div class="sub">last 8 touched docs</div></div>
 </div>
 
-<div class="section">
-  <div class="section-header">
-    <span>UBBL</span>
-    <span class="badge">Uniform Building By-Laws</span>
+<div class="controls">
+  <div class="search-row">
+    <input id="search" type="text" placeholder="Search documents, e.g. balustrade, PAM, MS 832, UBBL…" autocomplete="off">
+    <span class="count-hint" id="count-hint"></span>
   </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">fire-services-act-1988-fire-certificate</td><td></td></tr>
-      <tr><td class="doc-name">form-f1-partial-ccc</td><td><span class="trigger">kl-form-f1</span></td></tr>
-      <tr><td class="doc-name">ubbl-2021</td><td><span class="trigger">kl-ubbl</span></td></tr>
-      <tr><td colspan="2" style="padding: 8px 24px; background: #f5f8fa; font-size: 13px; font-weight: 600; color: var(--primary);">Fire Safety</td></tr>
-      <tr class="sub-section"><td class="doc-name">hose-reel-installation-height</td><td></td></tr>
-    </tbody>
-  </table>
+  <div class="chip-row" id="chips"></div>
 </div>
 
-<div class="section">
-  <div class="section-header">
-    <span>SPA</span>
-    <span class="badge">Sale &amp; Purchase Agreement</span>
+<div class="two-col">
+  <div class="panel">
+    <div class="panel-head">Documents <span class="badge" id="doc-badge"></span></div>
+    <div id="doc-list"></div>
+    <div class="empty" id="empty" style="display:none">No documents match your search.</div>
   </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">SPA-Schedule-G</td><td></td></tr>
-      <tr><td class="doc-name">SPA-Schedule-H</td><td></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <span>Contracts</span>
-    <span class="badge">PAM Contract Suite</span>
+  <div>
+    <div class="panel">
+      <div class="panel-head">Recently Updated</div>
+      <div id="recent-list"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">Sections</div>
+      <div id="section-list"></div>
+    </div>
   </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">pam2006-amendments-rev7</td><td></td></tr>
-      <tr><td class="doc-name">pam2006</td><td></td></tr>
-      <tr><td class="doc-name">pam2018</td><td><span class="trigger">kl-pam</span></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <span>Appointment / TOR</span>
-    <span class="badge">Terms of Reference</span>
-  </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">sime-darby-tor-architect-2024</td><td></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <span>LAM &amp; PAM Practice Notes</span>
-    <span class="badge">Lembaga Arkitek Malaysia</span>
-  </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td colspan="2" style="padding: 8px 24px; background: #f5f8fa; font-size: 13px; font-weight: 600; color: var(--primary);">Circulars</td></tr>
-      <tr class="sub-section"><td class="doc-name">2025-General-Circular-No-1-Form-G8-Fire-Safety</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">2025-General-Circular-No-2-Form-G10-Mechanical-Ventilation</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">LAM-GC-1-2008-CCC</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">LAM-GC-1-2024-Architect-Fees-Stakeholder</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">LAM-GC-2-2010-Form-F1</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">LAM-GC-2-2017-HDA-Stage-Claim</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">LAM-GC-4-2023-CPD-Guidelines</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">LAM-Superstructure-Stage</td><td></td></tr>
-      <tr><td colspan="2" style="padding: 8px 24px; background: #f5f8fa; font-size: 13px; font-weight: 600; color: var(--primary);">Pam</td></tr>
-      <tr class="sub-section"><td class="doc-name">2025-PAM-Practice-Note-PN-2025-1-PCWD</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">pn-2026-1-shop-drawings</td><td><span class="trigger">kl-pn-shop-drawings</span></td></tr>
-      <tr class="sub-section"><td class="doc-name">pn2023-3-the-arch-resp-setting-out</td><td><span class="trigger">kl-pn-settingout</span></td></tr>
-      <tr class="sub-section"><td class="doc-name">pn2024-3-retention-under-contracts-2006-2018r</td><td><span class="trigger">kl-pn-retention</span></td></tr>
-      <tr class="sub-section"><td class="doc-name">pn2025-1-pcwd-role-summary</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">pn2025-2-planning-statutory-append-abc</td><td><span class="trigger">kl-pn-planning</span></td></tr>
-      <tr class="sub-section"><td class="doc-name">pn2026-2-cessation-of-practice</td><td><span class="trigger">kl-pn-cessation</span></td></tr>
-      <tr class="sub-section"><td class="doc-name">pn2026-3-limitation-periods</td><td><span class="trigger">kl-pn-limitation</span></td></tr>
-      <tr class="sub-section"><td class="doc-name">pn2026-6-contract-completion-part2</td><td><span class="trigger">kl-pn-completion</span></td></tr>
-      <tr class="sub-section"><td class="doc-name">pn2026-9-cost-escalation-in-contracts</td><td></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <span>Codes</span>
-    <span class="badge">Malaysian Standards</span>
-  </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">MS-1184-2014-Universal-Design</td><td></td></tr>
-      <tr><td class="doc-name">cis-10-2020-shassic</td><td></td></tr>
-      <tr><td class="doc-name">cis-7-2021-qlassic</td><td></td></tr>
-      <tr><td class="doc-name">ms-1017-2022-aluminium-framed-glass-sliding-doors</td><td><span class="trigger">kl-ms1017</span></td></tr>
-      <tr><td class="doc-name">ms-1183-2015-fire-safety</td><td><span class="trigger">kl-ms1183</span></td></tr>
-      <tr><td class="doc-name">ms-1539-part3-2003-portable-fire-extinguisher</td><td></td></tr>
-      <tr><td class="doc-name">ms-1553-2002-wind-loading</td><td><span class="trigger">kl-ms1553</span></td></tr>
-      <tr><td class="doc-name">ms-2680-2017-energy-efficiency-residential</td><td><span class="trigger">kl-ms2680</span></td></tr>
-      <tr><td class="doc-name">ms-832-2022-aluminium-alloy-windows</td><td><span class="trigger">kl-ms832</span></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <span>Guidelines</span>
-    <span class="badge">Regulatory &amp; Technical</span>
-  </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">gpp-evcb-2023</td><td></td></tr>
-      <tr><td class="doc-name">msma-chapter-4-roof-drainage</td><td><span class="trigger">kl-msma</span></td></tr>
-      <tr><td class="doc-name">strata-share-unit-calculation</td><td><span class="trigger">kl-shareunit</span></td></tr>
-      <tr><td colspan="2" style="padding: 8px 24px; background: #f5f8fa; font-size: 13px; font-weight: 600; color: var(--primary);">Green Re</td></tr>
-      <tr class="sub-section"><td class="doc-name">greenre-res-scorecard-v3.3</td><td><span class="trigger">kl-greenre</span></td></tr>
-      <tr><td colspan="2" style="padding: 8px 24px; background: #f5f8fa; font-size: 13px; font-weight: 600; color: var(--primary);">Kuala Lumpur</td></tr>
-      <tr class="sub-section"><td class="doc-name">dbkl-gp4-carpark-guidelines-2018</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">dbkl-gpp-akses-oku-v2-2024</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">dbkl-gpp-tlk-wpkl-2024</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">gpp-pangsapuri-servis-dbkl-2020</td><td></td></tr>
-      <tr><td colspan="2" style="padding: 8px 24px; background: #f5f8fa; font-size: 13px; font-weight: 600; color: var(--primary);">Selangor</td></tr>
-      <tr class="sub-section"><td class="doc-name">Dasar-Rumah-Selangorku-3.0</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">JPBD-Commercial-Planning-Guidelines</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">JPBD-GFA-Definition</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">JPBD-Housing-Guidelines</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">JPBD-Industrial-Guidelines</td><td></td></tr>
-      <tr class="sub-section"><td class="doc-name">Rumah-Selangorku-Harapan-Guidelines</td><td></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <span>Regulations</span>
-    <span class="badge">DOSH &amp; Statutory</span>
-  </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">act133-street-drainage-building-1974</td><td></td></tr>
-      <tr><td class="doc-name">act172-town-country-planning-1976</td><td></td></tr>
-      <tr><td class="doc-name">dosh-mykkp-pemtk</td><td><span class="trigger">kl-dosh</span></td></tr>
-      <tr><td class="doc-name">hirarc-2008</td><td><span class="trigger">kl-hirarc</span></td></tr>
-      <tr><td class="doc-name">osh-construction-design-management-2024</td><td><span class="trigger">kl-osh</span></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <span>Materials</span>
-    <span class="badge">Product Data &amp; Specifications</span>
-  </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">SPC-installation</td><td></td></tr>
-      <tr><td class="doc-name">SPC</td><td></td></tr>
-      <tr><td class="doc-name">YTL-Cement-QuickMix-Product-Catalog</td><td></td></tr>
-      <tr><td class="doc-name">sikawall-603-acrylic</td><td><span class="trigger">kl-materials</span></td></tr>
-      <tr><td class="doc-name">tile-slip-resistance-standards</td><td></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <span>Utilities</span>
-    <span class="badge">TNB &amp; Infrastructure</span>
-  </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">span-utg-2018</td><td><span class="trigger">kl-span</span></td></tr>
-      <tr><td class="doc-name">st-domestic-wiring-guidelines-2024</td><td><span class="trigger">kl-electrical</span></td></tr>
-    </tbody>
-  </table>
-</div>
-
-<div class="section">
-  <div class="section-header">
-    <span>Sky</span>
-    <span class="badge">Company / Project Docs</span>
-  </div>
-  <table>
-    <thead><tr><th>Document</th><th>Trigger</th></tr></thead>
-    <tbody>
-      <tr><td class="doc-name">bungalow-lot-3133-eco-majestic-spa</td><td><span class="trigger">kl-sky</span></td></tr>
-      <tr><td class="doc-name">land-title-lot-3133-eco-majestic</td><td></td></tr>
-    </tbody>
-  </table>
 </div>
 
 <footer>
-  Knowledge Library &mdash; SKY Architects &bull; Generated 2026-08-06
+  Knowledge Library — SKY Architects • Generated 2026-08-10
 </footer>
+
+<script>
+const SECTIONS = [{"title":"Design Checklists","badge":"SDPB/PDI Best Practices","icon":"☑","dir":"checklist","docs":[{"display":"GQuaS guidebook 6th edition 2024","trigger":"kl-checklist","subdir":"","verified":"2026-07-16","sourcePdf":true},{"display":"sdpb industrial building design checklist","trigger":"kl-checklist","subdir":"","verified":null,"sourcePdf":true},{"display":"sdpb integrated building design checklist","trigger":"kl-checklist","subdir":"","verified":null,"sourcePdf":true},{"display":"sdpb landed building design checklist","trigger":"kl-checklist","subdir":"","verified":null,"sourcePdf":true}]},{"title":"UBBL","badge":"Uniform Building By-Laws","icon":"🏗","dir":"UBBL","docs":[{"display":"fire services act 1988 fire certificate","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"form f1 partial ccc","trigger":"kl-form-f1","subdir":"","verified":null,"sourcePdf":true},{"display":"hose reel installation height","trigger":"","subdir":"","verified":null,"sourcePdf":false},{"display":"hose reel installation height","trigger":"","subdir":"fire-safety","verified":null,"sourcePdf":false},{"display":"UBBL 2021","trigger":"kl-ubbl","subdir":"","verified":"2026-08-07","sourcePdf":true}]},{"title":"SPA","badge":"Sale & Purchase Agreement","icon":"📝","dir":"SPA","docs":[{"display":"SPA Schedule G","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"SPA Schedule H","trigger":"","subdir":"","verified":null,"sourcePdf":true}]},{"title":"Contracts","badge":"PAM Contract Suite","icon":"📄","dir":"contracts","docs":[{"display":"pam2006","trigger":"","subdir":"","verified":null,"sourcePdf":false},{"display":"pam2006 amendments rev7","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"pam2018","trigger":"kl-pam","subdir":"","verified":"2026-05-16","sourcePdf":false}]},{"title":"Appointment / TOR","badge":"Terms of Reference","icon":"📌","dir":"Appointment","docs":[{"display":"sime darby ToR architect 2024","trigger":"","subdir":"","verified":null,"sourcePdf":true}]},{"title":"LAM & PAM Practice Notes","badge":"Lembaga Arkitek Malaysia","icon":"📜","dir":"LAM","docs":[{"display":"General Circular No 1 Form G8 Fire Safety","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"General Circular No 1 Form G8 Fire Safety","trigger":"","subdir":"circulars","verified":null,"sourcePdf":true},{"display":"General Circular No 2 Form G10 Mechanical Ventilation","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"General Circular No 2 Form G10 Mechanical Ventilation","trigger":"","subdir":"circulars","verified":null,"sourcePdf":true},{"display":"LAM GC 1 2008 CCC","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"LAM GC 1 2008 CCC","trigger":"","subdir":"circulars","verified":null,"sourcePdf":true},{"display":"LAM GC 1 2024 Architect Fees Stakeholder","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"LAM GC 1 2024 Architect Fees Stakeholder","trigger":"","subdir":"circulars","verified":null,"sourcePdf":true},{"display":"LAM GC 2 2010 Form F1","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"LAM GC 2 2010 Form F1","trigger":"","subdir":"circulars","verified":null,"sourcePdf":true},{"display":"LAM GC 2 2017 HDA Stage Claim","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"LAM GC 2 2017 HDA Stage Claim","trigger":"","subdir":"circulars","verified":null,"sourcePdf":true},{"display":"LAM GC 4 2023 CPD Guidelines","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"LAM GC 4 2023 CPD Guidelines","trigger":"","subdir":"circulars","verified":null,"sourcePdf":true},{"display":"LAM Superstructure Stage","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"LAM Superstructure Stage","trigger":"","subdir":"circulars","verified":null,"sourcePdf":true},{"display":"PAM Practice Note PN 2025 1 PCWD","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"PAM Practice Note PN 2025 1 PCWD","trigger":"","subdir":"pam","verified":null,"sourcePdf":true},{"display":"PN 2026 1 shop drawings","trigger":"kl-pn-shop-drawings","subdir":"","verified":"2026-04-28","sourcePdf":true},{"display":"PN 2026 1 shop drawings","trigger":"kl-pn-shop-drawings","subdir":"pam","verified":"2026-04-28","sourcePdf":true},{"display":"pn2023 3 the arch resp setting out","trigger":"kl-pn-settingout","subdir":"","verified":null,"sourcePdf":true},{"display":"pn2023 3 the arch resp setting out","trigger":"kl-pn-settingout","subdir":"pam","verified":null,"sourcePdf":true},{"display":"pn2024 3 retention under contracts 2006 2018r","trigger":"kl-pn-retention","subdir":"","verified":null,"sourcePdf":true},{"display":"pn2024 3 retention under contracts 2006 2018r","trigger":"kl-pn-retention","subdir":"pam","verified":null,"sourcePdf":true},{"display":"pn2025 1 PCWD role summary","trigger":"","subdir":"","verified":null,"sourcePdf":false},{"display":"pn2025 1 PCWD role summary","trigger":"","subdir":"pam","verified":null,"sourcePdf":false},{"display":"pn2025 2 planning statutory append abc","trigger":"kl-pn-planning","subdir":"","verified":null,"sourcePdf":true},{"display":"pn2025 2 planning statutory append abc","trigger":"kl-pn-planning","subdir":"pam","verified":null,"sourcePdf":true},{"display":"pn2026 2 cessation of practice","trigger":"kl-pn-cessation","subdir":"","verified":null,"sourcePdf":true},{"display":"pn2026 2 cessation of practice","trigger":"kl-pn-cessation","subdir":"pam","verified":null,"sourcePdf":true},{"display":"pn2026 3 limitation periods","trigger":"kl-pn-limitation","subdir":"","verified":null,"sourcePdf":true},{"display":"pn2026 3 limitation periods","trigger":"kl-pn-limitation","subdir":"pam","verified":null,"sourcePdf":true},{"display":"pn2026 6 contract completion part2","trigger":"kl-pn-completion","subdir":"","verified":null,"sourcePdf":true},{"display":"pn2026 6 contract completion part2","trigger":"kl-pn-completion","subdir":"pam","verified":null,"sourcePdf":true},{"display":"pn2026 9 cost escalation in contracts","trigger":"","subdir":"","verified":"2026-05-06","sourcePdf":true},{"display":"pn2026 9 cost escalation in contracts","trigger":"","subdir":"pam","verified":"2026-05-06","sourcePdf":true}]},{"title":"Codes","badge":"Malaysian Standards","icon":"📏","dir":"codes","docs":[{"display":"CIS 10 2020 SHASSIC","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"CIS 7 2021 QLASSIC","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"MS 1017 2022 aluminium framed glass sliding doors","trigger":"kl-ms1017","subdir":"","verified":"2026-05-16","sourcePdf":true},{"display":"MS 1183 2015 fire safety","trigger":"kl-ms1183","subdir":"","verified":"2026-05-16","sourcePdf":true},{"display":"MS 1184 2014 Universal Design","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"MS 1539 part3 2003 portable fire extinguisher","trigger":"","subdir":"","verified":null,"sourcePdf":false},{"display":"MS 1553 2002 wind loading","trigger":"kl-ms1553","subdir":"","verified":"2026-05-16","sourcePdf":true},{"display":"MS 2680 2017 energy efficiency residential","trigger":"kl-ms2680","subdir":"","verified":"2026-05-16","sourcePdf":true},{"display":"MS 832 2022 aluminium alloy windows","trigger":"kl-ms832","subdir":"","verified":"2026-05-16","sourcePdf":true}]},{"title":"Guidelines","badge":"Regulatory & Technical","icon":"🧭","dir":"guidelines","docs":[{"display":"Dasar Rumah Selangorku 3.0","trigger":"","subdir":"state-guidelines","verified":null,"sourcePdf":true},{"display":"Dasar Rumah Selangorku 3.0","trigger":"","subdir":"selangor","verified":null,"sourcePdf":true},{"display":"DBKL gp4 carpark guidelines 2018","trigger":"kl-dbkl-carpark","subdir":"state-guidelines","verified":null,"sourcePdf":true},{"display":"DBKL gp4 carpark guidelines 2018","trigger":"kl-dbkl-carpark","subdir":"kuala-lumpur","verified":null,"sourcePdf":true},{"display":"DBKL GPP akses oku v2 2024","trigger":"kl-dbkl-oku","subdir":"state-guidelines","verified":null,"sourcePdf":true},{"display":"DBKL GPP akses oku v2 2024","trigger":"kl-dbkl-oku","subdir":"kuala-lumpur","verified":null,"sourcePdf":true},{"display":"DBKL GPP tlk wpkl 2024","trigger":"kl-dbkl-tlk","subdir":"state-guidelines","verified":null,"sourcePdf":true},{"display":"DBKL GPP tlk wpkl 2024","trigger":"kl-dbkl-tlk","subdir":"kuala-lumpur","verified":null,"sourcePdf":true},{"display":"GPP EVCB 2023","trigger":"kl-evcb","subdir":"","verified":null,"sourcePdf":true},{"display":"GPP pangsapuri servis DBKL 2020","trigger":"kl-kl","subdir":"state-guidelines","verified":null,"sourcePdf":true},{"display":"GPP pangsapuri servis DBKL 2020","trigger":"kl-kl","subdir":"kuala-lumpur","verified":null,"sourcePdf":true},{"display":"greenre res scorecard v3.3","trigger":"kl-greenre","subdir":"","verified":null,"sourcePdf":true},{"display":"greenre res scorecard v3.3","trigger":"kl-greenre","subdir":"green-re","verified":null,"sourcePdf":true},{"display":"JPBD Commercial Planning Guidelines","trigger":"","subdir":"state-guidelines","verified":null,"sourcePdf":true},{"display":"JPBD Commercial Planning Guidelines","trigger":"","subdir":"selangor","verified":null,"sourcePdf":true},{"display":"JPBD GFA Definition","trigger":"","subdir":"state-guidelines","verified":null,"sourcePdf":false},{"display":"JPBD GFA Definition","trigger":"","subdir":"selangor","verified":null,"sourcePdf":false},{"display":"JPBD Housing Guidelines","trigger":"","subdir":"state-guidelines","verified":null,"sourcePdf":true},{"display":"JPBD Housing Guidelines","trigger":"","subdir":"selangor","verified":null,"sourcePdf":true},{"display":"JPBD Industrial Guidelines","trigger":"kl-industrial","subdir":"state-guidelines","verified":"2026-06-05","sourcePdf":true},{"display":"JPBD Industrial Guidelines","trigger":"kl-industrial","subdir":"selangor","verified":"2026-06-05","sourcePdf":true},{"display":"MSMA chapter 4 roof drainage","trigger":"kl-msma","subdir":"","verified":null,"sourcePdf":false},{"display":"Rumah Selangorku Harapan Guidelines","trigger":"","subdir":"state-guidelines","verified":null,"sourcePdf":true},{"display":"Rumah Selangorku Harapan Guidelines","trigger":"","subdir":"selangor","verified":null,"sourcePdf":true},{"display":"strata share unit calculation","trigger":"kl-shareunit","subdir":"","verified":"2026-06-05","sourcePdf":false}]},{"title":"Regulations","badge":"DOSH & Statutory","icon":"⚖","dir":"regulations","docs":[{"display":"act133 street drainage building 1974","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"act172 town country planning 1976","trigger":"kl-act172","subdir":"","verified":null,"sourcePdf":true},{"display":"DOSH MyKKP PEMTK","trigger":"kl-dosh","subdir":"","verified":null,"sourcePdf":false},{"display":"HIRARC 2008","trigger":"kl-hirarc","subdir":"","verified":null,"sourcePdf":true},{"display":"OSH construction design management 2024","trigger":"kl-osh","subdir":"","verified":null,"sourcePdf":true}]},{"title":"Materials","badge":"Product Data & Specifications","icon":"🧱","dir":"materials","docs":[{"display":"SikaWall 603 acrylic","trigger":"kl-materials","subdir":"","verified":null,"sourcePdf":false},{"display":"SPC","trigger":"","subdir":"","verified":null,"sourcePdf":true},{"display":"SPC installation","trigger":"","subdir":"","verified":null,"sourcePdf":false},{"display":"tile slip resistance standards","trigger":"","subdir":"","verified":null,"sourcePdf":false},{"display":"YTL Cement QuickMix Product Catalog","trigger":"","subdir":"","verified":null,"sourcePdf":true}]},{"title":"Utilities","badge":"TNB & Infrastructure","icon":"⚡","dir":"utilities","docs":[{"display":"SPAN UTG 2018","trigger":"kl-span","subdir":"","verified":null,"sourcePdf":true},{"display":"ST domestic wiring guidelines 2024","trigger":"kl-electrical","subdir":"","verified":null,"sourcePdf":true}]},{"title":"Sky","badge":"Company / Project Docs","icon":"🏢","dir":"Sky","docs":[{"display":"bungalow lot 3133 eco majestic spa","trigger":"kl-sky","subdir":"","verified":null,"sourcePdf":true},{"display":"land title lot 3133 eco majestic","trigger":"","subdir":"","verified":null,"sourcePdf":true}]},{"title":"Specifications","badge":"M&E Specifications","icon":"🔧","dir":"spec","docs":[{"display":"approved me vendor list","trigger":"kl-spec","subdir":"","verified":null,"sourcePdf":true}]}];
+const RECENT = [{"display":"UBBL 2021","section":"UBBL","trigger":"kl-ubbl","mtime":"2026-08-07"},{"display":"land title lot 3133 eco majestic","section":"Sky","trigger":"","mtime":"2026-08-06"},{"display":"bungalow lot 3133 eco majestic spa","section":"Sky","trigger":"kl-sky","mtime":"2026-08-05"},{"display":"SikaWall 603 acrylic","section":"Materials","trigger":"kl-materials","mtime":"2026-08-02"},{"display":"MSMA chapter 4 roof drainage","section":"Guidelines","trigger":"kl-msma","mtime":"2026-08-02"},{"display":"PAM Practice Note PN 2025 1 PCWD","section":"LAM & PAM Practice Notes","trigger":"","mtime":"2026-08-02"},{"display":"PAM Practice Note PN 2025 1 PCWD","section":"LAM & PAM Practice Notes","trigger":"","mtime":"2026-08-02"},{"display":"greenre res scorecard v3.3","section":"Guidelines","trigger":"kl-greenre","mtime":"2026-08-02"}];
+let activeChip = 'All';
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+const chips = ['All', ...SECTIONS.map(s => s.title)];
+const chipEl = document.getElementById('chips');
+chips.forEach(c => {
+  const b = document.createElement('button');
+  b.className = 'chip' + (c === 'All' ? ' active' : '');
+  b.textContent = c;
+  b.onclick = () => {
+    activeChip = c;
+    document.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    render();
+  };
+  chipEl.appendChild(b);
+});
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  const list = document.getElementById('doc-list');
+  const empty = document.getElementById('empty');
+  list.innerHTML = '';
+  let shown = 0;
+
+  for (const sec of SECTIONS) {
+    if (activeChip !== 'All' && sec.title !== activeChip) continue;
+    let rows = '';
+    let n = 0;
+    for (const d of sec.docs) {
+      const hay = (d.display + ' ' + d.trigger + ' ' + d.subdir).toLowerCase();
+      if (q && !hay.includes(q)) continue;
+      n++; shown++;
+      const tags = [];
+      if (d.trigger) tags.push('<span class="tag tag-trigger">' + esc(d.trigger) + '</span>');
+      if (d.verified) tags.push('<span class="tag tag-verified">Verified ' + esc(d.verified) + '</span>');
+      if (d.sourcePdf) tags.push('<span class="tag tag-source">Source PDF</span>');
+      const sub = d.subdir ? '<span class="doc-meta">' + esc(d.subdir.replace(/[-_]/g,' ').replace(/\b\w/g, c=>c.toUpperCase())) + '</span>' : '';
+      rows += '<div class="doc-row"><div class="doc-main"><div class="doc-name">' + esc(d.display) + '</div>' + sub + '</div><div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">' + tags.join('') + '</div></div>';
+    }
+    if (n > 0) {
+      list.insertAdjacentHTML('beforeend',
+        '<div class="panel-head" style="border-top:1px solid var(--border)"><span>' + esc(sec.icon) + ' ' + esc(sec.title) + '</span><span class="badge">' + n + '</span></div>' + rows);
+    }
+  }
+  empty.style.display = shown ? 'none' : 'block';
+  document.getElementById('count-hint').textContent = shown + ' of ' + SECTIONS.reduce((a,s)=>a+s.docs.length,0) + ' documents';
+  document.getElementById('doc-badge').textContent = shown;
+}
+
+const recentList = document.getElementById('recent-list');
+recentList.innerHTML = RECENT.map(r =>
+  '<div class="recent-item"><span>' + esc(r.display) + '</span><span class="recent-date">' + esc(r.mtime) + '</span></div>'
+).join('');
+
+const sectionList = document.getElementById('section-list');
+sectionList.innerHTML = SECTIONS.map(s =>
+  '<div class="doc-row"><div class="doc-main"><div class="doc-name">' + esc(s.icon) + ' ' + esc(s.title) + '</div><div class="doc-meta">' + esc(s.badge) + '</div></div><div style="display:flex;gap:6px;align-items:center"><span class="tag tag-source">' + s.docs.length + '</span></div></div>'
+).join('');
+
+document.getElementById('search').addEventListener('input', render);
+render();
+</script>
 </body>
 </html>
