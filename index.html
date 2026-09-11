@@ -21,6 +21,8 @@
     --shadow: rgba(23,22,15,0.06);
     --shadow-lift: rgba(23,22,15,0.10);
     --accent: var(--s1);
+    --accent-hover: #365cd1;
+    --accent-ink: #ffffff;
     --accent-soft: #eef2fb;
     --accent-soft-line: #d8e2f5;
     --s1: #123fc9;
@@ -54,6 +56,8 @@
     --border: rgba(255,255,255,0.09);
     --shadow: rgba(0,0,0,0.4);
     --shadow-lift: rgba(0,0,0,0.55);
+    --accent-hover: #a9c4ff;
+    --accent-ink: #0e1418;
     --accent-soft: #1d2836;
     --accent-soft-line: #2c3d52;
     --s1: #7ea8ff;
@@ -105,13 +109,13 @@
     display: inline-flex; align-items: center; gap: 8px;
     font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600;
     letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
-    color: var(--accent); border: 1px solid var(--accent); background: var(--accent-soft);
+    color: var(--accent-ink); border: 1px solid var(--accent); background: var(--accent);
     padding: 7px 14px; border-radius: 100px; white-space: nowrap;
     margin-bottom: 20px;
     transition: color .18s ease, border-color .18s ease, background-color .18s ease, transform .18s ease, box-shadow .18s ease;
   }
   .back-pill:hover {
-    color: var(--accent); border-color: var(--accent); background: var(--accent-soft-line);
+    color: var(--accent-ink); border-color: var(--accent-hover); background: var(--accent-hover);
     text-decoration: none;
     transform: translateY(-2px);
     box-shadow: 0 6px 18px var(--shadow-lift);
